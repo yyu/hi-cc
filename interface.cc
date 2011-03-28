@@ -1,5 +1,14 @@
 #include <iostream>
 
+#define Interface class
+
+Interface Runnable
+{
+public:
+	virtual ~Runnable() {}
+	virtual void run() = 0;
+};
+
 class Animal
 {
 public:
@@ -8,18 +17,13 @@ public:
 		std::cout << "Animal born." << std::endl;
 	}
 
-	virtual void eat(void)
-	{
-		std::cout << "Animal eats." << std::endl;
-	}
-	
 	virtual ~Animal(void)
 	{
 		std::cout << "Animal dies." << std::endl;
 	}
 };
 
-class Dog : public Animal
+class Dog : public Animal, public Runnable
 {
 public:
 	Dog(void)
@@ -27,9 +31,9 @@ public:
 		std::cout << "Dog born." << std::endl;
 	}
 
-	virtual void eat(void)
+	virtual void run(void)
 	{
-		std::cout << "Dog eats." << std::endl;
+		std::cout << "Dog runs." << std::endl;
 	}
 
 	~Dog(void)
@@ -40,9 +44,10 @@ public:
 
 int main(void)
 {
-	Animal * a = new Dog;
-	a->eat();
-	delete a;
+	Runnable * x = new Dog;
+	x->run();
+
+	delete x;
 
 	return 0;
 }
