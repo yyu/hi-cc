@@ -1,18 +1,19 @@
 #include <iostream>
 
-using namespace std;
-
 int main(void)
 {
-	string s;
-	cout << "please input a string: ";
-	cin >> s;
-	cout << "a string: " << s << endl;
+	std::string s;
+	std::cout << "please input a string: ";
+	std::cin >> s;
+	std::cout << "a string: " << s << std::endl;
 
 	char c;
-	cout << "please input a char: ";
-	cin >> c;
-	cout << "a char: " << c << endl;
+	std::cout << "please input a char: ";
+	std::cin >> c;
+	std::cout << "a char: " << c
+		  << std::hex << std::uppercase
+		  << " (0x" << int(c) << ") "
+		  << std::endl;
 
 	return 0;
 }
