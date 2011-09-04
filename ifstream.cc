@@ -22,6 +22,7 @@ int main(int argc, char * argv[])
         }
 
         // read by line
+        // http://rosettacode.org/wiki/Read_a_file_line_by_line#C.2B.2B
 	std::string line;
         int i = 0;
         // about ``getline()'':
@@ -53,9 +54,19 @@ int main(int argc, char * argv[])
                         ifile >> word;
                         printf("! this is not a number: %s\n", word.c_str());
                 } else {
-                        printf("got %3d%s\n", num);
+                        printf("got %3d\n", num);
                 }
         }
+
+        // rewind
+        rewind(ifile);
+
+        // read entire file as string
+        // http://rosettacode.org/wiki/Read_entire_file#C.2B.2B
+        std::istreambuf_iterator<char> ifbegin(ifile);
+        std::istreambuf_iterator<char> ifend;
+        std::string fileData(ifbegin, ifend);
+        printf("\n--------\n%s\n--------\n", fileData.c_str());
 
 	ifile.close();
 
