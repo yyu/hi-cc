@@ -2,7 +2,8 @@
 #include <deque>
 
 const char * comments[] = {"",
-                           "deque is similar to vector, the following is worth reading:",
+                           "deque is similar to vector",
+                           "==========================",
                            "",
                            "<From Herb Sutter's article @ http://www.gotw.ca/gotw/054.htm>",
                            "",
@@ -68,6 +69,17 @@ const char * comments[] = {"",
                            "        - vector.cc",
                            "        - http://www.cplusplus.com/reference/stl/vector/",
                            "        - http://www.cplusplus.com/reference/stl/deque/",
+                           "",
+                           "",
+                           "iterator invalidating",
+                           "=====================",
+                           "",
+                           "- Inserting elements at the front or back of a deque does not invalidate any iterators.",
+                           "- Erasing the front or back element invalidates only iterators referring to the element(s) erased.",
+                           "- Inserting or erasing anywhere else in the deque invalidates all iterators referring to elements of the deque.",
+                           "",
+                           "See:",
+                           "        - C++ Primer §9.5 @ p.334",
                            ""};
 
 int main(int argc, char * argv[])

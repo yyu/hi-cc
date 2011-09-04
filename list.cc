@@ -233,6 +233,10 @@ int main(int argc, char * argv[])
         }
 
         std::cout << "\n======== swap() ========\n";
+        // swap does not invalidate iterators.
+        // After swap, iterators continue to refer to the same elements,
+        // although those elements are now in a different container.
+        // @see C++ Primer §9.3.8 @ p.328
         {
                 std::list<int> l0(kL);
                 std::list<int> l1(kL);

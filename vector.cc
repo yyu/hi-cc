@@ -185,6 +185,17 @@ int main(int argc, char * argv[])
                           << std::hex << v.max_size()
                           << std::dec << "\n";
                 std::cout << "capacity(): " << v.capacity() << "\n";
+                print_vector_via_copy_to_ostream(v);
+
+                for (int k = 0; k < 5; ++k) {
+                        size_t i;
+                        for (i = v.size(); i < v.capacity(); ++i)
+                                v.push_back(i);
+                        v.push_back(++i);
+
+                        std::cout << "size() / capacity(): " << v.size() << " / " << v.capacity() << "\n";
+                        print_vector_via_copy_to_ostream(v);
+                }
         }
 
         std::cout << "\n======== assign() ========\n";
