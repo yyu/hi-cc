@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cassert>
 
+#define __________________________________________________ print_iterative
+
 template <typename T>
 void print_iterative(T b, T e, bool newline = true)
 {
@@ -94,13 +96,12 @@ int main(int argc, char* argv[])
                 int N = sizeof(A) / sizeof(A[0]);
 
                 std::make_heap(A, A + N);
-
-                print_iterative(A, A + N);
+                __________________________________________________(A, A + N);
 
                 for (int i = 0; i < N; ++i) {
                         std::cout << A[0] << " <= ";
                         std::pop_heap(A, A + N - i);
-                        print_iterative(A, A + N - i - 1);
+                        __________________________________________________(A, A + N - i - 1);
                 }
         }
 
@@ -110,13 +111,21 @@ int main(int argc, char* argv[])
                 int N = sizeof(A) / sizeof(A[0]);
 
                 std::make_heap(A, A + N);
-
-                print_iterative(A, A + N);
-
+                __________________________________________________(A, A + N);
                 for (int i = 0; i < N; ++i)
                         std::pop_heap(A, A + N - i);
+                __________________________________________________(A, A + N);
+        }
 
-                print_iterative(A, A + N);
+        print_banner("heapsort using make_heap() and sort_heap()");
+        {
+                int A[] = {3, 1, 4, 1, 5, 9, 2, 6, 5};
+                int N = sizeof(A) / sizeof(A[0]);
+
+                std::make_heap(A, A + N);
+                __________________________________________________(A, A + N);
+                std::sort_heap(A, A + N);
+                __________________________________________________(A, A + N);
         }
 
         print_banner("make_heap(), pop_heap() + container.pop_back()");
@@ -132,13 +141,12 @@ int main(int argc, char* argv[])
                 for (int i = 0; i < N; ++i) {
                         // the one with the most priority:
                         std::cout << "(" << pq.front() << ") ";
-
-                        print_iterative(pq.begin(), pq.end());
+                        __________________________________________________(pq.begin(), pq.end());
 
                         std::pop_heap(pq.begin(), pq.end());
 
                         std::cout << "\t\t\tafter pop_heap: ";
-                        print_iterative(pq.begin(), pq.end(), false);
+                        __________________________________________________(pq.begin(), pq.end(), false);
 
                         std::cout << "    pq.pop_back() is expected right now\n";
                         pq.pop_back();
@@ -160,13 +168,12 @@ int main(int argc, char* argv[])
                 for (int i = 0; i < N1 + N2; ++i) {
                         // the one with the most priority:
                         std::cout << "(" << pq.front() << ") ";
-
-                        print_iterative(pq.begin(), pq.end());
+                        __________________________________________________(pq.begin(), pq.end());
 
                         std::pop_heap(pq.begin(), pq.end());
 
                         std::cout << "\t\t\tafter pop_heap: ";
-                        print_iterative(pq.begin(), pq.end(), false);
+                        __________________________________________________(pq.begin(), pq.end(), false);
 
                         std::cout << "    pq.pop_back() is expected right now\n";
                         pq.pop_back();
@@ -177,7 +184,7 @@ int main(int argc, char* argv[])
                                 std::push_heap(pq.begin(), pq.end());
 
                                 std::cout << "\t\t\tafter push_heap(" << new_val << "): ";
-                                print_iterative(pq.begin(), pq.end());
+                                __________________________________________________(pq.begin(), pq.end());
                         }
                 }
         }
