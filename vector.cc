@@ -286,5 +286,34 @@ int main(int argc, char * argv[])
                 print_vector_via_copy_to_ostream(v);
         }
 
+        std::cout << "\n======== resize() ========\n";
+        {
+                IntVec v;
+                ifr.get(&v);
+
+                print_vector_via_copy_to_ostream(v);
+                std::cout << "size()    : " << v.size() << "\n";
+                std::cout << "capacity(): " << v.capacity() << "\n";
+                v.resize(50, 99);
+                std::cout << "size()    : " << v.size() << "\n";
+                std::cout << "capacity(): " << v.capacity() << "\n";
+                print_vector_via_copy_to_ostream(v);
+        }
+
+        std::cout << "\n======== reserve() ========\n";
+        {
+                IntVec v;
+                ifr.get(&v);
+
+                print_vector_via_copy_to_ostream(v);
+                std::cout << "size()    : " << v.size() << "\n";
+                std::cout << "capacity(): " << v.capacity() << "\n";
+                v.reserve(50);
+                std::cout << "size()    : " << v.size() << "\n";
+                std::cout << "capacity(): " << v.capacity() << "\n";
+                v[35] = 99;     // has no effect
+                print_vector_via_copy_to_ostream(v);
+        }
+
         return EXIT_SUCCESS;
 }
