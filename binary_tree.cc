@@ -83,29 +83,13 @@ class BST
 public:
     BST() : root_(NULL) {}
     template <typename IN_ITER> BST(IN_ITER b, IN_ITER e);
-    BST(const std::string& str)
-        : root_(NULL)
-    {
-        const char* s = str.c_str();
-        try {
-            root_ = s2t(&s);
-        } catch (std::logic_error& e) {
-            std::cerr << "Failed in BST(const std::string& str). Details: \n";
-            std::cerr << "        " << e.what() << "\n";
-            std::cerr << "        " << str << "\n";
-            std::cerr << "        " << std::string(s - str.c_str(), ' ')
-                      << "^\n";
-            root_ = NULL;
-        } catch (std::exception& e) {
-            std::cerr << "Failed in BST(const std::string& str). what(): \n";
-            std::cerr << "        " << e.what() << "\n";
-            root_ = NULL;
-        }
-    }
+    BST(const std::string& str);
     ~BST() {}
 
     bool empty() const;
     void insert(TreeNode<T>* node);
+    void insert(const T& v);
+    template <typename IN_ITER> void insert(IN_ITER b, IN_ITER e);
     void preorder(const SimplePrint<T>& visit) const;
     void inorder(const SimplePrint<T>& visit) const;
     void postorder(const SimplePrint<T>& visit) const;
@@ -130,6 +114,35 @@ BST<T>::BST(IN_ITER b, IN_ITER e)
 {
     for (IN_ITER it = b; it != e; ++it)
         insert(new TreeNode<T>(*it));
+}
+
+template <typename T>
+template <typename IN_ITER>
+void BST<T>::insert(IN_ITER b, IN_ITER e)
+{
+    for (IN_ITER it = b; it != e; ++it)
+        insert(new TreeNode<T>(*it));
+}
+
+template <typename T>
+BST<T>::BST(const std::string& str)
+    : root_(NULL)
+{
+    const char* s = str.c_str();
+    try {
+        root_ = s2t(&s);
+    } catch (std::logic_error& e) {
+        std::cerr << "Failed in BST(const std::string& str). Details: \n";
+        std::cerr << "        " << e.what() << "\n";
+        std::cerr << "        " << str << "\n";
+        std::cerr << "        " << std::string(s - str.c_str(), ' ')
+                  << "^\n";
+        root_ = NULL;
+    } catch (std::exception& e) {
+        std::cerr << "Failed in BST(const std::string& str). what(): \n";
+        std::cerr << "        " << e.what() << "\n";
+        root_ = NULL;
+    }
 }
 
 template <typename T>
@@ -186,6 +199,12 @@ template <typename T>
 bool BST<T>::empty() const
 {
     return root_ == NULL;
+}
+
+template <typename T>
+void BST<T>::insert(const T& v)
+{
+    insert(new TreeNode<T>(v));
 }
 
 template <typename T>
@@ -410,6 +429,12 @@ int main(int argc, char* argv[])
     // BST<char> char_bst("(A(B)(C))"); // simple test case
     BST<char> char_bst("(A(B(D(O()(S(T)(U)))(P()(R)))())"
                        "(C(E()(G(M)()))(F(H(K)(L))(J))))");
+    char_bst.insert('B');
+
+    char foxdog[] = "THEBROWNQUICKFOXJUMPSOVERALAZYDOG";
+    size_t NFD = sizeof(foxdog) / sizeof(foxdog[0]);
+    char_bst.insert(foxdog, foxdog + NFD - 1); // -1 because of the trailing '\n'
+
     std::cout << char_bst;
 
     return 0;
