@@ -4,8 +4,9 @@
 #include <stack>
 #include <queue>
 #include <iterator>
-#include <cassert>
+#include <stdexcept>
 
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -82,6 +83,25 @@ class BST
 public:
     BST() : root_(NULL) {}
     template <typename IN_ITER> BST(IN_ITER b, IN_ITER e);
+    BST(const std::string& str)
+        : root_(NULL)
+    {
+        const char* s = str.c_str();
+        try {
+            root_ = s2t(&s);
+        } catch (std::logic_error& e) {
+            std::cerr << "Failed in BST(const std::string& str). Details: \n";
+            std::cerr << "        " << e.what() << "\n";
+            std::cerr << "        " << str << "\n";
+            std::cerr << "        " << std::string(s - str.c_str(), ' ')
+                      << "^\n";
+            root_ = NULL;
+        } catch (std::exception& e) {
+            std::cerr << "Failed in BST(const std::string& str). what(): \n";
+            std::cerr << "        " << e.what() << "\n";
+            root_ = NULL;
+        }
+    }
     ~BST() {}
 
     bool empty() const;
@@ -94,7 +114,7 @@ public:
     friend std::ostream& operator<< (std::ostream& out, const BST& t) {return out << t.toString();}
 private:
     std::string toString() const;
-
+    TreeNode<T>* s2t(const char** s);
     void traverse(TreeNode<T>* node, const NicePrint<T>& visit, int depth, int dir) const;
 
     TreeNode<T>* root_;
@@ -110,6 +130,56 @@ BST<T>::BST(IN_ITER b, IN_ITER e)
 {
     for (IN_ITER it = b; it != e; ++it)
         insert(new TreeNode<T>(*it));
+}
+
+template <typename T>
+TreeNode<T>* BST<T>::s2t(const char** s)
+{
+    if (!s || !(*s))
+        return NULL;
+
+    char c = **s;
+
+    if (c == ')') {
+        return NULL;
+    } else if (c == '(') {
+        (*s)++;         /* skip '(' */
+    } else {
+        std::string errmsg("Invalid BEGIN char: ");
+        errmsg += c;
+        throw std::logic_error(errmsg);
+    }
+
+    c = **s;                /* get root node */
+    TreeNode<T>* n = NULL;
+    if (c >= 'A' && c <= 'Z') {
+        (*s)++;
+        try {
+            n = new TreeNode<T>;
+            n->val = c;
+            n->L = s2t(s);
+            n->R = s2t(s);
+            c = **s;
+            if (c != ')') {
+                std::string errmsg("Invalid END char: ");
+                errmsg += c;
+                throw std::logic_error(errmsg);
+            }
+            (*s)++;
+        } catch (std::bad_alloc& e) {
+            throw;
+        } catch (std::logic_error& e) {
+            delete n;
+            throw;
+        }
+    } else if (c == ')') {
+        (*s)++;
+    } else {
+        std::string errmsg("Invalid node data: ");
+        errmsg += c;
+        throw std::logic_error(errmsg);
+    }
+    return n;
 }
 
 template <typename T>
@@ -174,6 +244,7 @@ std::string BST<T>::toString() const
         lines.push_back(line);
         std::cout << line << "\n";
     }
+    std::cout << "\n";
 
     bool the_end = false;
     size_t column_nr = 0;
@@ -309,15 +380,15 @@ void BST<T>::levelorder(const SimplePrint<T>& visit) const
 
 int main(int argc, char* argv[])
 {
-    // typedef int NodeValType;
-    // NodeValType A[] = {3, 2, 6, 1, 4, 8, 5, 7, 9};
-    // size_t N = sizeof(A) / sizeof(A[0]);
-    // BST<NodeValType> bst(A, A + N);
-
-    typedef char NodeValType;
-    NodeValType A[] = "THEBROWNQUICKFOXJUMPSOVERALAZYDOG";
+    typedef int NodeValType;
+    NodeValType A[] = {3, 2, 6, 1, 4, 8, 5, 7, 9};
     size_t N = sizeof(A) / sizeof(A[0]);
-    BST<NodeValType> bst(A, A + N - 1); // -1 because of the trailing '\n'
+    BST<NodeValType> bst(A, A + N);
+
+    // typedef char NodeValType;
+    // NodeValType A[] = "THEBROWNQUICKFOXJUMPSOVERALAZYDOG";
+    // size_t N = sizeof(A) / sizeof(A[0]);
+    // BST<NodeValType> bst(A, A + N - 1); // -1 because of the trailing '\n'
 
     assert(!bst.empty());
 
@@ -332,6 +403,14 @@ int main(int argc, char* argv[])
     bst.postorder(SimplePrint<NodeValType>(std::cout, "."));
 
     bst.levelorder(SimplePrint<NodeValType>(std::cout, "."));
+
+    // BST<char> char_bst("(A|B)(C))"); // Invalid BEGIN char
+    // BST<char> char_bst("(A(B)(C)|"); // Invalid END char
+    // BST<char> char_bst("(A(?)(C))"); // Invalid node data
+    // BST<char> char_bst("(A(B)(C))"); // simple test case
+    BST<char> char_bst("(A(B(D(O()(S(T)(U)))(P()(R)))())"
+                       "(C(E()(G(M)()))(F(H(K)(L))(J))))");
+    std::cout << char_bst;
 
     return 0;
 }
