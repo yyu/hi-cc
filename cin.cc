@@ -15,5 +15,10 @@ int main(void)
 		  << " (0x" << int(c) << ") "
 		  << std::endl;
 
+	int i;
+	std::cout << "please input a integer: ";
+	std::cin >> i;
+	std::cout << "a integer: " << i << std::endl;
+
 	return 0;
 }
