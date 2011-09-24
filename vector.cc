@@ -315,5 +315,21 @@ int main(int argc, char * argv[])
                 print_vector_via_copy_to_ostream(v);
         }
 
+        std::cout << "\n======== sizeof ========\n";
+        {
+            std::vector<int> v;
+            std::cout << "sizeof(v): " << sizeof(v) << "\n";
+            v.resize(100);
+            std::cout << "sizeof(v): " << sizeof(v) << "\n";
+
+            struct s {
+                std::vector<int>         v1;
+                std::vector<std::string> v2;
+            };
+            struct s x;
+            std::cout << "sizeof(struct s): " << sizeof(struct s) << "\n";
+            std::cout << "sizeof(x): " << sizeof(x) << "\n";
+        }
+
         return EXIT_SUCCESS;
 }
