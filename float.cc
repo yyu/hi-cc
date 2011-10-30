@@ -65,6 +65,18 @@ int main(int argc, char* argv[])
     print_float(f);
     print_float(f * f);
 
+    f = 0.125;
+    print_float(f);
+
+    f = 1.5625;
+    print_float(f);
+
+    f = 25;
+    print_float(f);
+
+    f = 2e-45;  // subnormal number
+    print_float(f);
+
     double d = 5.625;
     print_float(d);
 
