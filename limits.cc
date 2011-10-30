@@ -1,12 +1,93 @@
 #include <iostream>
+#include <vector>
 #include <limits>
 
 #include <cstdio>
 #include <cassert>
 
+#define RED      "\033[31m"
+#define GREEN    "\033[32m"
+#define YELLOW   "\033[33m"
+#define BLUE     "\033[34m"
+#define MAGENTA  "\033[35m"
+#define GRAY     "\033[37m"
+#define NOCOLOR  "\033[0m"
+
+template <typename T>
+void test(const std::string& t, const std::string& specifier)
+{
+    std::cout << "\n" << RED << t
+              << std::string(80 - t.length(), '-') << NOCOLOR;
+
+    const T INFTY   = std::numeric_limits<T>::infinity();
+    const T epsilon = std::numeric_limits<T>::epsilon();
+    const T max     = std::numeric_limits<T>::max();
+    const T min     = std::numeric_limits<T>::min();
+
+    std::vector< std::pair<std::string, T> > vec;
+
+    vec.push_back(std::make_pair("∞ ("+t+")",   INFTY));
+    vec.push_back(std::make_pair("-∞ ("+t+")", -INFTY));
+    vec.push_back(std::make_pair("𝜖 ("+t+")",    epsilon));
+    vec.push_back(std::make_pair("-𝜖 ("+t+")",  -epsilon));
+    vec.push_back(std::make_pair("max ("+t+")",  max));
+    vec.push_back(std::make_pair("min ("+t+")",  min));
+
+    std::string fmt = YELLOW"printf"NOCOLOR"      "GREEN + specifier + NOCOLOR"\n";
+    for (typename std::vector< std::pair<std::string, T> >::iterator it
+             = vec.begin(); it != vec.end(); ++it) {
+        std::cout << "\n"BLUE << it->first << ":"NOCOLOR"\n";
+
+        std::cout << YELLOW"std::cout"NOCOLOR"   "GREEN
+                  << it->second << NOCOLOR"\n";
+        printf(fmt.c_str(), it->second);
+
+        const unsigned char* p =
+            reinterpret_cast<const unsigned char*>(&(it->second));
+        printf(GRAY"byte index: ");
+        int n = sizeof(T);
+        for (int i = n - 1; i >= 0; i--)
+            printf("%2d ", i);
+        printf("\n       HEX: "MAGENTA);
+        for (int i = n - 1; i >= 0; i--)
+            printf("%02X ", p[i]);
+        printf(NOCOLOR"\n");
+
+        printf(GRAY" bit index:|");
+        for (int i = n * 8 - 1; i >= 0; i--) {
+            printf("%c", i / 10 ? i / 10 + '0' : ' ');
+            if (i && i % 4 == 0)
+                printf(" ");
+        }
+        printf("|\n           |");
+        for (int i = n * 8 - 1; i >= 0; i--) {
+            printf("%d", i % 10);
+            if (i && i % 4 == 0)
+                printf(" ");
+        }
+        printf("|\n       BIN: "MAGENTA);
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = 7; j >= 4; j--)
+                printf("%d", p[i] >> j & 1);
+            printf(" ");
+            for (int j = 3; j >= 0; j--)
+                printf("%d", p[i] >> j & 1);
+            printf(" ");
+        }
+        printf(NOCOLOR"\n");
+
+    }
+ 
+    assert(max < INFTY);
+    assert(min > -INFTY);
+}
+
 int main(int argc, char* argv[])
 {
-    // See: http://www.cplusplus.com/reference/std/limits/numeric_limits/
+    // See:
+    //   - http://www.cplusplus.com/reference/std/limits/numeric_limits/
+    //   - http://en.wikipedia.org/wiki/Single_precision
+    //   - http://en.wikipedia.org/wiki/Double_precision
 
     {
         // from:
@@ -26,113 +107,9 @@ int main(int argc, char* argv[])
                   << std::numeric_limits<long double>::infinity( ) << std::endl;
     }
 
-    {
-        std::cout << std::string(80, '-');
-
-        const float INFTY   = std::numeric_limits<float>::infinity();
-        const float epsilon = std::numeric_limits<float>::epsilon();
-        const float max     = std::numeric_limits<float>::max();
-        const float min     = std::numeric_limits<float>::min();
- 
-        std::cout << "\n∞:\n";
-        std::cout << "std::cout  " << INFTY << "\n";
-        printf("printf     %f\n", INFTY);
- 
-        std::cout << "\n-∞:\n";
-        std::cout << "std::cout  " << -INFTY << "\n";
-        printf("printf     %f\n", -INFTY);
- 
-        std::cout << "\n𝜖:\n";
-        std::cout << "std::cout  " << epsilon << "\n";
-        printf("printf     %f\n", epsilon);
- 
-        std::cout << "\n-𝜖:\n";
-        std::cout << "std::cout  " << -epsilon << "\n";
-        printf("printf     %f\n", -epsilon);
- 
-        std::cout << "\nmax:\n";
-        std::cout << "std::cout  " << max << "\n";
-        printf("printf     %f\n", max);
- 
-        std::cout << "\nmin:\n";
-        std::cout << "std::cout  " << min << "\n";
-        printf("printf     %f\n", min );
- 
-        assert(max < INFTY);
-        assert(min > -INFTY);
-    }
-
-    {
-        std::cout << std::string(80, '-');
-
-        const double INFTY   = std::numeric_limits<double>::infinity();
-        const double epsilon = std::numeric_limits<double>::epsilon();
-        const double max     = std::numeric_limits<double>::max();
-        const double min     = std::numeric_limits<double>::min();
- 
-        std::cout << "\n∞:\n";
-        std::cout << "std::cout  " << INFTY << "\n";
-        printf("printf     %f\n", INFTY);
- 
-        std::cout << "\n-∞:\n";
-        std::cout << "std::cout  " << -INFTY << "\n";
-        printf("printf     %f\n", -INFTY);
- 
-        std::cout << "\n𝜖:\n";
-        std::cout << "std::cout  " << epsilon << "\n";
-        printf("printf     %f\n", epsilon);
- 
-        std::cout << "\n-𝜖:\n";
-        std::cout << "std::cout  " << -epsilon << "\n";
-        printf("printf     %f\n", -epsilon);
- 
-        std::cout << "\nmax:\n";
-        std::cout << "std::cout  " << max << "\n";
-        printf("printf     %f\n", max);
- 
-        std::cout << "\nmin:\n";
-        std::cout << "std::cout  " << min << "\n";
-        printf("printf     %f\n", min );
- 
-        assert(max < INFTY);
-        assert(min > -INFTY);
-    }
-
-    {
-        std::cout << std::string(80, '-');
-
-        const long double INFTY   = std::numeric_limits<long double>::infinity();
-        const long double epsilon = std::numeric_limits<long double>::epsilon();
-        const long double max     = std::numeric_limits<long double>::max();
-        const long double min     = std::numeric_limits<long double>::min();
- 
-        std::cout << "\n∞:\n";
-        std::cout << "std::cout  " << INFTY << "\n";
-        printf("printf     %Lf\n", INFTY);
- 
-        std::cout << "\n-∞:\n";
-        std::cout << "std::cout  " << -INFTY << "\n";
-        printf("printf     %Lf\n", -INFTY);
- 
-        std::cout << "\n𝜖:\n";
-        std::cout << "std::cout  " << epsilon << "\n";
-        printf("printf     %Lf\n", epsilon);
- 
-        std::cout << "\n-𝜖:\n";
-        std::cout << "std::cout  " << -epsilon << "\n";
-        printf("printf     %Lf\n", -epsilon);
- 
-        std::cout << "\nmax:\n";
-        std::cout << "std::cout  " << max << "\n";
-        printf("printf     %Lf\n", max);
- 
-        std::cout << "\nmin:\n";
-        std::cout << "std::cout  " << min << "\n";
-        printf("printf     %Lf\n", min );
- 
-        assert(max < INFTY);
-        assert(min > -INFTY);
-    }
+    test<float>("float", "%f");
+    test<double>("double", "%f");
+    test<long double>("long double", "%Lf");
 
     return 0;
 }
