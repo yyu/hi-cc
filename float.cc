@@ -78,8 +78,10 @@ int main(int argc, char* argv[])
     printf("∞:\n");
     print_float(infty);
     print_float(-infty);
-    print_float(infty + infty);
-    print_float(-infty - infty);
+    assert( infty + infty ==  infty);
+    assert(-infty - infty == -infty);
+    assert( infty + 3.14  ==  infty);
+    assert( infty - 3.14  ==  infty);
 
     printf("NaN:\n");
     std::vector<float> NaNs;
