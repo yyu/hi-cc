@@ -78,8 +78,16 @@ void test(const std::string& t, const std::string& specifier)
 
     }
  
+    double inf1 = INFTY;
+    double inf2 = INFTY;
+    assert(inf1 == inf2);
+
     assert(max < INFTY);
     assert(min > -INFTY);
+    assert(!(max > INFTY));
+    assert(!(min < -INFTY));
+    assert(!(max >= INFTY));
+    assert(!(min <= -INFTY));
 }
 
 int main(int argc, char* argv[])

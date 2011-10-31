@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <limits>
 
 #include <cstdio>
 #include <cassert>
@@ -60,8 +62,46 @@ int main(int argc, char* argv[])
     // Also see:
     //   ~/local/src/mine/C++/limits.cc
 
-    float f = 5.625;
-    
+    float infty   = std::numeric_limits<float>::infinity();
+    float epsilon = std::numeric_limits<float>::epsilon();
+
+    float f;
+
+    printf("0:\n");
+    print_float(0.0);
+    print_float(-0.0);
+    assert(0.0 == -0.0);
+
+    printf("𝜖:\n");
+    print_float(epsilon);
+
+    printf("∞:\n");
+    print_float(infty);
+    print_float(-infty);
+    print_float(infty + infty);
+    print_float(-infty - infty);
+
+    printf("NaN:\n");
+    std::vector<float> NaNs;
+    NaNs.push_back(std::numeric_limits<float>::quiet_NaN());
+    NaNs.push_back(std::numeric_limits<float>::signaling_NaN());
+    NaNs.push_back(  infty  -   infty );
+    NaNs.push_back( -infty  +   infty );
+    NaNs.push_back(  infty  /   infty );
+    NaNs.push_back( -infty  /   infty );
+    NaNs.push_back(  infty  / (-infty));
+    NaNs.push_back(  infty  *       0 );
+    NaNs.push_back( -infty  *       0 );
+    NaNs.push_back((-infty) *       0 );
+    NaNs.push_back(      0  *   infty );
+    NaNs.push_back(      0  * (-infty));
+    for (std::vector<float>::iterator it = NaNs.begin(); it != NaNs.end(); ++it) {
+        print_float(*it);
+        print_float(-*it);
+	assert(*it != *it);
+    }
+
+    f = 5.625;
     print_float(f);
     print_float(f * f);
 
@@ -83,9 +123,11 @@ int main(int argc, char* argv[])
     long double ld = 5.625;
     print_float(ld);
 
+#if 0
     float x = 268435453.0;
     for (int i = 0; i < 2; i++)
         print_float(x + i);
+#endif
 
     // 大于 2²⁴ 的整数，单精度捉襟见肘
     float a[] = {
