@@ -3,6 +3,8 @@
 //     $ ./foo
 // Ref:
 //     http://en.wikipedia.org/wiki/Unordered_map_%28C%2B%2B%29
+//     http://en.cppreference.com/w/cpp/container/unordered_map
+//     http://stackoverflow.com/questions/2189189/map-vs-hash-map-in-c
 
 #include <iostream>
 #include <unordered_map>
