@@ -15,7 +15,7 @@ int main(int argc, char * argv[])
         return EXIT_FAILURE;
     }
 
-	std::ifstream ifile(argv[1]);
+    std::ifstream ifile(argv[1]);
     if (!ifile) {
         perror("failed to open file");
         return EXIT_FAILURE;
@@ -23,14 +23,14 @@ int main(int argc, char * argv[])
 
     // read by line
     // http://rosettacode.org/wiki/Read_a_file_line_by_line#C.2B.2B
-	std::string line;
+    std::string line;
     int i = 0;
     // about ``getline()'':
     // - http://en.cppreference.com/w/cpp/string/getline
     // - http://augustcouncil.com/~tgibson/tutorial/iotips.html
-	while (std::getline(ifile, line)) {
+    while (std::getline(ifile, line)) {
         printf("%3d : %s\n", ++i, line.c_str());
-	}
+    }
 
     // rewind
     rewind(ifile);
@@ -47,7 +47,8 @@ int main(int argc, char * argv[])
     // read by int
     //ifile.exceptions( std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     int num;
-    while (!ifile.eof()) {
+    //while (!ifile.eof()) {
+    while (ifile.good()) {
         ifile >> num;
         if (ifile.rdstate() & std::ifstream::failbit) {
             ifile.clear();
@@ -68,7 +69,7 @@ int main(int argc, char * argv[])
     std::string fileData(ifbegin, ifend);
     printf("\n--------\n%s\n--------\n", fileData.c_str());
 
-	ifile.close();
+    ifile.close();
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
