@@ -25,8 +25,6 @@
  *   philips hue
  *
  *     https://developers.meethue.com/develop/get-started/
- *
- * will do something like
  */
 
 #include <stdio.h>
