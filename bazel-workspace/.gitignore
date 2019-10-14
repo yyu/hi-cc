@@ -1,0 +1,5 @@
+.clwb
+bazel-bazel-workspace
+bazel-bin
+bazel-out
+bazel-testlogs
