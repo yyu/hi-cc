@@ -24,8 +24,23 @@ template <typename T>
 T Bar<T>::m_;
 
 ////////////////////////////////////////////////////////////////////////////////
+// static var can execute code before main() runs
+class Blah {
+public:
+    Blah() {m_ = 999;}
+    void func() {std::cout << m_ << "\n";}
+private:
+    int m_;
+};
+
+static Blah blah;
+
+////////////////////////////////////////////////////////////////////////////////
 // test code
 int main(int argc, char* argv[]) {
+    // at the beginning of main(), code in Blah's c'tor already ran
+    blah.func();
+
     Foo foo;
     foo.func();
 
